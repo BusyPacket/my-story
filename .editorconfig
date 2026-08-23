@@ -1,0 +1,19 @@
+# 与 .gitattributes（eol=lf）和 .prettierrc.json（缩进 2 / LF / printWidth 100）保持一致
+root = true
+
+# 所有文本文件的默认规则
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# 代码文件：与 prettier 的 printWidth: 100 保持一致
+[*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,vue,css,scss,sass,less,styl}]
+max_line_length = 100
+
+# Markdown：prettier 不强制 md 尾随空格语义，关闭 trim 以免误删两空格换行
+[*.md]
+trim_trailing_whitespace = false

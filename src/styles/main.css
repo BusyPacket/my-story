@@ -1,0 +1,126 @@
+:root {
+  color-scheme: light;
+
+  /* 基础 */
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f3f4f6;
+  --color-card-bg: #ffffff;
+  --color-text: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+  --color-border: #e5e7eb;
+  --color-border-strong: #9ca3af;
+
+  /* 主色 / 强调色 */
+  --color-primary: #2563eb;
+  --color-primary-text: #ffffff;
+  --color-accent: #7c3aed;
+
+  /* 类型圆点色 */
+  --trip-dot: #2563eb;
+  --honor-dot: #d97706;
+  --milestone-dot: #16a34a;
+  --annual-dot: #0891b2;
+
+  /* 类型徽标色 */
+  --trip-badge-bg: #dbeafe;
+  --trip-badge-text: #1d4ed8;
+  --honor-badge-bg: #fef3c7;
+  --honor-badge-text: #b45309;
+  --milestone-badge-bg: #dcfce7;
+  --milestone-badge-text: #15803d;
+  --annual-badge-bg: #cffafe;
+  --annual-badge-text: #0e7490;
+
+  /* 资产状态徽标色 */
+  --status-holding-bg: #dcfce7;
+  --status-holding-text: #15803d;
+  --status-discarded-bg: #f3f4f6;
+  --status-discarded-text: #6b7280;
+  --status-sold-bg: #dbeafe;
+  --status-sold-text: #1d4ed8;
+  --status-retired-bg: #fef3c7;
+  --status-retired-text: #b45309;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-bg: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-card-bg: #1e293b;
+  --color-text: #e2e8f0;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-border: #334155;
+  --color-border-strong: #64748b;
+
+  --color-primary: #3b82f6;
+  --color-primary-text: #ffffff;
+  --color-accent: #8b5cf6;
+
+  --trip-dot: #3b82f6;
+  --honor-dot: #f59e0b;
+  --milestone-dot: #22c55e;
+  --annual-dot: #06b6d4;
+
+  --trip-badge-bg: rgba(59, 130, 246, 0.18);
+  --trip-badge-text: #93c5fd;
+  --honor-badge-bg: rgba(245, 158, 11, 0.18);
+  --honor-badge-text: #fcd34d;
+  --milestone-badge-bg: rgba(34, 197, 94, 0.18);
+  --milestone-badge-text: #86efac;
+  --annual-badge-bg: rgba(6, 182, 212, 0.18);
+  --annual-badge-text: #67e8f9;
+
+  /* 资产状态徽标色（暗色） */
+  --status-holding-bg: rgba(34, 197, 94, 0.18);
+  --status-holding-text: #86efac;
+  --status-discarded-bg: rgba(148, 163, 184, 0.18);
+  --status-discarded-text: #cbd5e1;
+  --status-sold-bg: rgba(59, 130, 246, 0.18);
+  --status-sold-text: #93c5fd;
+  --status-retired-bg: rgba(245, 158, 11, 0.18);
+  --status-retired-text: #fcd34d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'PingFang SC',
+    'Hiragino Sans GB',
+    'Microsoft YaHei',
+    sans-serif;
+  line-height: 1.6;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* 卡片通用：标题行 + 分类标签（资产页的物品卡片与订阅卡片共用） */
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  flex-shrink: 0;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+}
