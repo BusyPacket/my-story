@@ -5,6 +5,7 @@ import { sortAnchor, stories, type Story, type StoryType, type Visibility } from
 import { renderMarkdown, useStoryContent } from '@/composables/useStoryContent'
 import { itemCardsByYear, type ItemCardData } from '@/composables/useAssets'
 import AssetItemCard from '@/components/AssetItemCard.vue'
+import DateView from '@/components/DateView.vue'
 
 type FilterKey = 'all' | StoryType
 
@@ -112,6 +113,14 @@ function scrollToYear(year: number): void {
   document.getElementById(`year-${year}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
+// 日期视图点击格子：滚动到该日期对应的事件卡片（复用排序锚点匹配日期）
+function onSelectDate(date: string): void {
+  const story = visibleStories.value.find((s) => sortAnchor(s).slice(0, 10) === date)
+  if (story) {
+    document.getElementById(`story-${story.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
 // 年份下拉：选择后跳转并重置，方便重复选择
 function onYearChange(event: Event): void {
   const select = event.target as HTMLSelectElement
@@ -203,6 +212,8 @@ function onVideoError(event: Event): void {
       </label>
     </div>
 
+    <DateView v-if="visibleStories.length > 0" :stories="visibleStories" @select-date="onSelectDate" />
+
     <label v-if="groupedStories.length > 0" class="year-nav">
       <span class="year-nav__label">年份</span>
       <select class="year-nav__select" value="" @change="onYearChange" aria-label="按年份跳转">
@@ -227,7 +238,8 @@ function onVideoError(event: Event): void {
             <span class="timeline__year-count">{{ yearStories.length }}</span>
           </h2>
           <ol class="timeline__list">
-            <li v-for="story in yearStories" :key="`${story.title}-${story.date}`" class="timeline__item">
+            <li v-for="story in yearStories" :key="`${story.title}-${story.date}`" :id="`story-${story.id}`"
+              class="timeline__item">
               <div class="timeline__dot" :class="`timeline__dot--${story.type}`"></div>
               <article class="timeline__card">
                 <div class="timeline__meta">
@@ -478,6 +490,7 @@ function onVideoError(event: Event): void {
 
 .timeline__item {
   position: relative;
+  scroll-margin-top: 72px;
 }
 
 .timeline__dot {
