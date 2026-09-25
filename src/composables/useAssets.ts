@@ -19,11 +19,18 @@ export type AssetStatus = 'holding' | 'discarded' | 'sold' | 'retired'
 /** 全部可选状态（用于遍历 / 校验，如筛选下拉） */
 export const ASSET_STATUSES: AssetStatus[] = ['holding', 'discarded', 'sold', 'retired']
 
-/** 购入方式：taobao=淘宝 / jd=京东 / xianyu=闲鱼 / other=其他（默认） */
-export type PurchaseMethod = 'taobao' | 'jd' | 'xianyu' | 'other'
+/** 购入方式：taobao=淘宝 / jd=京东 / xianyu=闲鱼 / custom=定制 / gift=赠与 / other=其他（默认） */
+export type PurchaseMethod = 'taobao' | 'jd' | 'xianyu' | 'custom' | 'gift' | 'other'
 
 /** 全部可选购入方式（用于遍历 / 校验） */
-export const PURCHASE_METHODS: PurchaseMethod[] = ['taobao', 'jd', 'xianyu', 'other']
+export const PURCHASE_METHODS: PurchaseMethod[] = [
+  'taobao',
+  'jd',
+  'xianyu',
+  'custom',
+  'gift',
+  'other',
+]
 
 /** 使用频率：daily=每天 / weekly=每周 / monthly=每月 / rarely=很少 */
 export type UsageFrequency = 'daily' | 'weekly' | 'monthly' | 'rarely'

@@ -31,14 +31,16 @@ const USAGE_LABEL: Record<UsageFrequency, string> = {
   rarely: '很少',
 }
 
-/** 购入方式：taobao=淘宝 / jd=京东 / xianyu=闲鱼 / other=其他 */
-type PurchaseMethod = 'taobao' | 'jd' | 'xianyu' | 'other'
+/** 购入方式：taobao=淘宝 / jd=京东 / xianyu=闲鱼 / custom=定制 / gift=赠与 / other=其他 */
+type PurchaseMethod = 'taobao' | 'jd' | 'xianyu' | 'custom' | 'gift' | 'other'
 
 /** 购入方式 → 中文展示文案 */
 const PURCHASE_METHOD_LABEL: Record<PurchaseMethod, string> = {
   taobao: '淘宝',
   jd: '京东',
   xianyu: '闲鱼',
+  custom: '定制',
+  gift: '赠与',
   other: '其他',
 }
 
@@ -132,7 +134,7 @@ function onPhotoError(event: Event): void {
           <span class="item-card__part-name">{{ part.name }}</span>
           <span class="item-card__part-price">{{
             formatPrice(part.price * (part.quantity ?? 1))
-            }}</span>
+          }}</span>
         </li>
         <li v-for="s in item.sold ?? []" :key="`${s.name ?? ''}-${s.price}-${s.date ?? ''}`"
           class="item-card__part item-card__part--sold">
@@ -147,7 +149,7 @@ function onPhotoError(event: Event): void {
       <template v-if="item.status === 'sold' || item.status === 'discarded'">
         <span>{{ PURCHASE_METHOD_LABEL[item.purchase_method ?? 'other'] }}购入 · 持有：{{
           item.purchase_date
-        }}
+          }}
           - {{ item.status_date }}（{{ item.daysUsed }} 天）</span>
       </template>
       <template v-else>
