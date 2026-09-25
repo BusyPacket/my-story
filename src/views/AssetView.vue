@@ -8,13 +8,16 @@ import {
 } from '@/composables/useAssets'
 import AssetItemCard from '@/components/AssetItemCard.vue'
 
-// 总览统计
+// 总览统计（赠与物品按市价展示，但不计入「物品总投入」，见 README）
 const stats = computed(() => {
   const itemList = items.value
   const memberList = memberships.value
   return {
     itemCount: itemList.length,
-    itemTotal: itemList.reduce((sum, asset) => sum + asset.totalPrice, 0),
+    itemTotal: itemList.reduce(
+      (sum, asset) => (asset.purchase_method === 'gift' ? sum : sum + asset.totalPrice),
+      0,
+    ),
     memberCount: memberList.length,
     memberMonthly: memberList.reduce((sum, asset) => sum + asset.monthlyCost, 0),
   }
@@ -108,7 +111,17 @@ function maskPhone(text: string): string {
       </div>
       <div class="stat">
         <span class="stat__value">{{ formatPrice(stats.itemTotal) }}</span>
-        <span class="stat__label">物品总投入</span>
+        <span class="stat__label">
+          物品总投入
+          <span class="stat__info" tabindex="0" role="img" aria-label="物品总投入的计算方式">
+            i
+            <span class="stat__tip" role="tooltip">
+              物品总投入 = Σ（总价 − 转卖所得）<br />
+              总价：有配件明细时按配件合计，否则取条目总价<br />
+              赠与（gift）购入的物品不计入
+            </span>
+          </span>
+        </span>
       </div>
       <div class="stat">
         <span class="stat__value">{{ stats.memberCount }}</span>
@@ -235,6 +248,61 @@ function maskPhone(text: string): string {
 .stat__label {
   font-size: 13px;
   color: var(--color-text-secondary);
+}
+
+/* 「物品总投入」旁的圆圈 i 图标：hover / 聚焦显示计算逻辑 */
+.stat__info {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  margin-left: 4px;
+  border: 1px solid var(--color-text-muted);
+  border-radius: 50%;
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1;
+  vertical-align: text-bottom;
+  cursor: help;
+  user-select: none;
+}
+
+.stat__info:hover,
+.stat__info:focus-visible {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  outline: none;
+}
+
+.stat__tip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: -8px;
+  z-index: 10;
+  display: none;
+  width: max-content;
+  max-width: 240px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  background: var(--color-card-bg);
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.6;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 12%);
+}
+
+.stat__info:hover .stat__tip,
+.stat__info:focus-visible .stat__tip {
+  display: block;
 }
 
 /* 区块标题 */

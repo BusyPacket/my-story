@@ -175,6 +175,7 @@ robocopy /MIR C:\Users\19209\my_file\code\my-story\public\media D:\backup\my-sto
 | `other`  | 其他（不填默认） |
 
 与状态一致存英文值，中文文案在卡片组件内映射显示。
+`gift`（赠与）的物品仍按市价显示价格与日均费用，但**不计入页面顶部的「物品总投入」合计**。
 
 **使用频率（`usage`）取值**：
 
