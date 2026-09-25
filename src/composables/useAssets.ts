@@ -25,6 +25,12 @@ export type PurchaseMethod = 'taobao' | 'jd' | 'xianyu' | 'other'
 /** 全部可选购入方式（用于遍历 / 校验） */
 export const PURCHASE_METHODS: PurchaseMethod[] = ['taobao', 'jd', 'xianyu', 'other']
 
+/** 使用频率：daily=每天 / weekly=每周 / monthly=每月 / rarely=很少 */
+export type UsageFrequency = 'daily' | 'weekly' | 'monthly' | 'rarely'
+
+/** 全部可选使用频率（由高到低，用于遍历 / 校验） */
+export const USAGE_FREQUENCIES: UsageFrequency[] = ['daily', 'weekly', 'monthly', 'rarely']
+
 export type AssetItem = {
   id: string
   type: 'item'
@@ -32,6 +38,8 @@ export type AssetItem = {
   /** 分类标签（如：电脑、硬盘、内存） */
   tag?: string
   description?: string
+  /** 使用频率（可选，不填表示未统计），用于衡量「买得贵但用得少」 */
+  usage?: UsageFrequency
   purchase_date: string
   /** 购入方式（不填默认视为其他） */
   purchase_method?: PurchaseMethod
@@ -81,6 +89,7 @@ export interface ItemCardData {
   tag?: string
   description?: string
   photo?: string
+  usage?: UsageFrequency
   purchase_date: string
   purchase_method?: PurchaseMethod
   parts: AssetPart[]
@@ -177,6 +186,7 @@ function toItemCard(asset: AssetItem): ItemCardData {
     tag: asset.tag,
     description: asset.description,
     photo: asset.photo,
+    usage: asset.usage,
     purchase_date: asset.purchase_date,
     parts,
     sold: asset.sold,

@@ -20,6 +20,17 @@ const STATUS_LABEL: Record<AssetStatus, string> = {
   retired: '淘汰',
 }
 
+/** 使用频率：daily=每天 / weekly=每周 / monthly=每月 / rarely=很少 */
+type UsageFrequency = 'daily' | 'weekly' | 'monthly' | 'rarely'
+
+/** 使用频率 → 卡片展示文案（拼在“使用”前） */
+const USAGE_LABEL: Record<UsageFrequency, string> = {
+  daily: '每天',
+  weekly: '每周',
+  monthly: '每月',
+  rarely: '很少',
+}
+
 /** 购入方式：taobao=淘宝 / jd=京东 / xianyu=闲鱼 / other=其他 */
 type PurchaseMethod = 'taobao' | 'jd' | 'xianyu' | 'other'
 
@@ -46,6 +57,7 @@ interface ItemCardData {
   tag?: string
   description?: string
   photo?: string
+  usage?: UsageFrequency
   purchase_date: string
   purchase_method?: PurchaseMethod
   parts: CardPart[]
@@ -131,6 +143,7 @@ function onPhotoError(event: Event): void {
       </ul>
     </details>
     <div class="item-card__meta">
+      <span v-if="item.usage">{{ USAGE_LABEL[item.usage] }}使用</span>
       <template v-if="item.status === 'sold' || item.status === 'discarded'">
         <span>{{ PURCHASE_METHOD_LABEL[item.purchase_method ?? 'other'] }}购入 · 持有：{{
           item.purchase_date
