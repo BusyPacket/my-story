@@ -74,6 +74,37 @@ function onPhotoError(event: Event): void {
 function onVideoError(event: Event): void {
   ; (event.target as HTMLVideoElement).classList.add('detail__video--missing')
 }
+
+// 附件（PDF / Word 等）按类型给个图标，路径本身太长，不适合直接当标题显示
+const FILE_ICONS: Record<string, string> = {
+  pdf: '📄',
+  doc: '📝',
+  docx: '📝',
+  xls: '📊',
+  xlsx: '📊',
+  ppt: '📽️',
+  pptx: '📽️',
+  zip: '🗜️',
+  rar: '🗜️',
+  '7z': '🗜️',
+  txt: '📃',
+}
+
+// 去掉查询串与目录，取文件名；路径含中文时是 URL 编码的，解码失败就保持原样
+function fileNameOf(file: string): string {
+  const path = file.split(/[?#]/)[0] ?? file
+  const name = path.split('/').pop() ?? path
+  try {
+    return decodeURIComponent(name)
+  } catch {
+    return name
+  }
+}
+
+function fileIconOf(file: string): string {
+  const ext = file.split(/[?#]/)[0]?.split('.').pop()?.toLowerCase()
+  return FILE_ICONS[ext ?? ''] ?? '📎'
+}
 </script>
 
 <template>
@@ -128,7 +159,11 @@ function onVideoError(event: Event): void {
         <h2 class="detail__section-title">文件</h2>
         <ul class="detail__files">
           <li v-for="file in story.files" :key="file">
-            <a :href="file" target="_blank" rel="noopener noreferrer">{{ file }}</a>
+            <a class="detail__file" :href="file" :title="file" target="_blank" rel="noopener noreferrer">
+              <span class="detail__file-icon" aria-hidden="true">{{ fileIconOf(file) }}</span>
+              <span class="detail__file-name">{{ fileNameOf(file) }}</span>
+              <span class="detail__file-open" aria-hidden="true">打开 ↗</span>
+            </a>
           </li>
         </ul>
       </section>
@@ -368,22 +403,55 @@ function onVideoError(event: Event): void {
 }
 
 .detail__files {
+  list-style: none;
   margin: 0;
-  padding-left: 20px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   font-size: 14px;
 }
 
-.detail__files a {
-  color: var(--color-primary);
+/* 附件行：图标 + 文件名 + 打开提示，长文件名省略号截断（完整路径放 title） */
+.detail__file {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
   text-decoration: none;
-  word-break: break-all;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
 }
 
-.detail__files a:hover {
-  text-decoration: underline;
+.detail__file:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.detail__file-icon {
+  flex: none;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.detail__file-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail__file-open {
+  flex: none;
+  font-size: 12px;
+  color: var(--color-text-muted);
 }
 
 .detail__notfound {
