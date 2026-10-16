@@ -180,7 +180,8 @@ function onSelectYear(event: Event): void {
     </div>
 
     <div class="date-view__scroll">
-      <div class="date-view__graph" :style="{ gridTemplateColumns: `auto repeat(${grid.weeks.length}, 13px)` }">
+      <div class="date-view__graph"
+        :style="{ gridTemplateColumns: `auto repeat(${grid.weeks.length}, minmax(0, 1fr))` }">
         <span v-for="m in grid.monthSpans" :key="m.start" class="date-view__month"
           :style="{ gridColumn: `${m.start} / ${m.end}` }">{{ m.label }}月</span>
         <template v-for="(week, w) in grid.weeks" :key="w">
@@ -300,11 +301,12 @@ function onSelectYear(event: Event): void {
   padding-bottom: 4px;
 }
 
+/* 整年网格按容器宽度均分：列宽自适应 + 方格 aspect-ratio 保持正方形，
+   保证 53 周（含月份标签列）不产生横向滚动条 */
 .date-view__graph {
   display: grid;
-  grid-template-rows: 18px repeat(7, 13px);
-  gap: 2px 3px;
-  width: max-content;
+  grid-template-rows: 18px repeat(7, auto);
+  gap: 2px;
   align-items: center;
 }
 
@@ -313,19 +315,20 @@ function onSelectYear(event: Event): void {
   color: var(--color-text-muted);
   white-space: nowrap;
   padding-right: 4px;
+  overflow: hidden;
 }
 
 .date-view__weekday {
   font-size: 10px;
   color: var(--color-text-muted);
   text-align: center;
-  line-height: 13px;
+  line-height: 1;
 }
 
 .date-view__cell {
-  width: 13px;
-  height: 13px;
-  border-radius: 3px;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 2px;
   background: var(--color-bg-secondary);
 }
 
